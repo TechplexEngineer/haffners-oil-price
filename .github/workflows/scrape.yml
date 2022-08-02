@@ -13,6 +13,11 @@ jobs:
     - name: Check out this repo
       uses: actions/checkout@v2
 
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        cache: 'npm'
+
     - uses: actions/cache@v2
       id: npm-cache
       with:
@@ -26,7 +31,12 @@ jobs:
 
     - name: Fetch latest data
       run: |-
-        xvfb-run node scrape.js | tee price.txt
+        price=$(xvfb-run node scrape.js | tee price.txt)
+        if [[ ! $price =~ ^\$[0-9.]+$ ]];
+        then
+          echo "Did not retrieve a valid price! - $price"
+          exit 1
+        fi
 
     - name: Commit and push if it changed
       run: |-
