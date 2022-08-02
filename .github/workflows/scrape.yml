@@ -13,10 +13,16 @@ jobs:
     - name: Check out this repo
       uses: actions/checkout@v2
 
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        cache: 'npm'
+
+    - run: npm ci
+
     - name: Fetch latest data
       run: |-
-        npm ci # install deps
-        node scrape.js > price.txt
+        xvfb-run node scrape.js > price.txt
 
     - name: Commit and push if it changed
       run: |-
