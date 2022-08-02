@@ -22,7 +22,7 @@ jobs:
 
     - name: Fetch latest data
       run: |-
-        xvfb-run node scrape.js > price.txt
+        xvfb-run node scrape.js | tee price.txt
 
     - name: Commit and push if it changed
       run: |-
