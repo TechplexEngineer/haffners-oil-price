@@ -13,26 +13,7 @@ jobs:
     - name: Check out this repo
       uses: actions/checkout@v2
 
-    # - uses: actions/setup-node@v3
-    #   with:
-    #     node-version: 16
-    #     cache: 'npm'
-
-    - name: Get npm cache directory
-      id: npm-cache-dir
-      run: |
-        echo "::set-output name=dir::$(npm config get cache)"
-
-    - uses: actions/cache@v2
-      id: npm-cache
-      with:
-        path:
-          - "**/node_modules"
-          - ${{ steps.npm-cache-dir.outputs.dir }}
-        key: ${{ hashFiles('package-lock.json') }}
-
     - name: install deps
-      if: steps.npm-cache.outputs.cache-hit != 'true'
       run: npm ci
 
     - name: Fetch latest data
