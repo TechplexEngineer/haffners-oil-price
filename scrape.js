@@ -17,9 +17,15 @@ import { chromium } from 'playwright';
 
     await page.goto("https://haffners.com/");
 
-    await page.waitForSelector("span.price");
+    // Wait for the element containing "Today's Oil Price:"
+    await page.waitForSelector('text=Today\'s Oil Price:');
 
-    console.log(await page.locator("span.price").first().innerText());
+    // Find the div containing "Today's Oil Price:" and get the price from the second span
+    const priceText = await page.locator('text=Today\'s Oil Price:').locator('..').locator('span.lg\\:text-xl').innerText();
+
+    // Extract just the numeric price (e.g., "3.099" from "$3.099")
+    const price = priceText.replace('$', '').trim();
+    console.log(`$${price}`);
 
     // await page.pause();
 
